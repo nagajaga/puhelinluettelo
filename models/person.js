@@ -5,7 +5,7 @@ const url = process.env.MONGODB_URI;
 console.log("connecting to", url);
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log("connected to MongoDB");
   })
   .catch((error) => {
@@ -20,7 +20,10 @@ const personSchema = new mongoose.Schema({
   } ,
   number:{
     type: String,
-    minlength: 8,
+    validate: {
+      validator: v => /^(\d{2}-\d{6,}|\d{3}-\d{5,})/.test(v),
+      message: "Incorrect phone number formatting. Examples of valid numbers: 12-345678 or 123-45678"
+    },
     required: true
   }
 });
